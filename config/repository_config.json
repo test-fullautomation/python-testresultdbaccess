@@ -1,0 +1,20 @@
+{
+   "REPOSITORYNAME" : "robotframework-robotlog2db",
+   "PACKAGENAME" : "TestResultDBAccess",
+   "AUTHOR" : "Tran Duy Ngoan",
+   "AUTHOREMAIL" : "Ngoan.TranDuy@vn.bosch.com",
+   "DESCRIPTION" : "Imports robot result(s) to TestResultWebApp database",
+   "LONGDESCRIPTIONCONTENTTYPE" : "text/markdown",
+   "URL" : "https://github.com/test-fullautomation/robotframework-robotlog2db",
+   "PROGRAMMINGLANGUAGE" : "Programming Language :: Python :: 3",
+   "LICENCE" : "License :: OSI Approved :: Apache Software License",
+   "OPERATINGSYSTEM" : "Operating System :: OS Independent",
+   "PYTHONREQUIRES" : ">=3.0",
+   "DEVELOPMENTSTATUS" : "Development Status :: 4 - Beta",
+   "INTENDEDAUDIENCE" : "Intended Audience :: Developers",
+   "TOPIC" : "Topic :: Software Development",
+   "INSTALLREQUIRES" : ["colorama","mysqlclient","robotframework","lxml","requests_kerberos"],
+   "PACKAGEDATA" : ["*.pdf", "xsd/*.xsd"],
+   "PACKAGEDOC" : "./packagedoc",
+   "CONSOLESCRIPTS" : ["TestResultDBAccess = TestResultDBAccess.robotlog2db:TestResultDBAccess"]
+}
