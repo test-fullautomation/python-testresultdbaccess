@@ -1,0 +1,61 @@
+% Copyright 2020-2023 Robert Bosch GmbH
+
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+
+% http://www.apache.org/licenses/LICENSE-2.0
+
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+
+The TestResultDBAccess package offers a flexible and efficient way to interact 
+with the database of a test result web application. 
+
+Users can choose between direct database access and REST API access, 
+depending on their specific needs and preferences.
+
+\subsection{DBAccessFactory}
+
+The \textbf{DBAccessFactory} class is responsible for creating instances of the 
+\textbf{DBAccess} interface based on the specified access method. 
+
+It provides the following method:
+
+\begin{itemize}
+    \item \textbf{create(access\_method: str): DBAccess} - Creates an instance 
+          of \textbf{DBAccess} based on the specified access method 
+          (\pcode{rest} or \pcode{db}).
+\end{itemize}
+
+\subsection{DBAccess Interface}
+
+The \textbf{DBAccess} interface defines a set of methods for interacting with 
+the database. These methods include:
+
+\begin{itemize}
+    \item \textbf{connect(host: str, user: str, passwd: str, database: str)} - 
+          Establishes a connection to the database.
+    \item \textbf{disconnect()} - Destroys the connection to the database.
+    \item Various methods for retrieving, creating, updating, and finishing test 
+          result data in the database, such as \textbf{arGetCategories()}, 
+          \textbf{sGetLatestFileID()}, \textbf{vCreateTags()}, 
+          \textbf{vUpdateResultEndTime()}, and \textbf{vFinishTestResult()}.
+\end{itemize}
+
+\subsection{DirectDBAccess}
+
+The \textbf{DirectDBAccess} class implements the \textbf{DBAccess} interface for 
+direct database access. 
+It provides methods for establishing and destroying connections, as well as 
+implementing the various data manipulation methods defined in \textbf{DBAccess}.
+
+\subsection{RestApiDBAccess}
+
+The \textbf{RestApiDBAccess} class implements the \textbf{DBAccess} interface 
+for REST API access to the database. 
+Similar to \textbf{DirectDBAccess}, it provides methods for connecting, 
+disconnecting, and implementing data manipulation methods through the REST API.

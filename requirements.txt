@@ -1,0 +1,6 @@
+colorama
+pypandoc
+GenPackageDoc
+PythonExtensionsCollection
+mysqlclient
+requests_kerberos

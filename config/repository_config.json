@@ -1,0 +1,20 @@
+{
+   "REPOSITORYNAME" : "python-testresultdbaccess",
+   "PACKAGENAME" : "TestResultDBAccess",
+   "AUTHOR" : "Tran Duy Ngoan",
+   "AUTHOREMAIL" : "Ngoan.TranDuy@vn.bosch.com",
+   "DESCRIPTION" : "Interfaces to access TestResultWebApp database",
+   "LONGDESCRIPTIONCONTENTTYPE" : "text/markdown",
+   "URL" : "https://github.com/test-fullautomation/python-testresultdbaccess",
+   "PROGRAMMINGLANGUAGE" : "Programming Language :: Python :: 3",
+   "LICENCE" : "License :: OSI Approved :: Apache Software License",
+   "OPERATINGSYSTEM" : "Operating System :: OS Independent",
+   "PYTHONREQUIRES" : ">=3.0",
+   "DEVELOPMENTSTATUS" : "Development Status :: 4 - Beta",
+   "INTENDEDAUDIENCE" : "Intended Audience :: Developers",
+   "TOPIC" : "Topic :: Software Development",
+   "INSTALLREQUIRES" : ["mysqlclient","requests_kerberos"],
+   "PACKAGEDATA" : ["*.pdf", "db_access/*.py"],
+   "PACKAGEDOC" : "./packagedoc",
+   "CONSOLESCRIPTS": ""
+}
