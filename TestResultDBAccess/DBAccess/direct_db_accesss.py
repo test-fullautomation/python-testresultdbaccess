@@ -13,7 +13,7 @@
 #  limitations under the License.
 # *******************************************************************************
 #
-# File: DirectDBAccess.py
+# File: direct_db_accesss.py
 #
 # Initialy created by Pollerspoeck Thomas (CM/PJ-CMD) / June 2016
 #
@@ -28,13 +28,14 @@
 #  - update sourcecode document
 # 
 # March 2024:
-#  - rename file to DirectDBAccess due to DB interface feature of RobotLog2DB
+#  - rename file to direct_db_accesss due to DB interface feature of RobotLog2DB
 #
 # *******************************************************************************
 
+from .db_accesss_interface import DBAccess
 import MySQLdb as db
 
-class DirectDBAccess(object):
+class DirectDBAccess(DBAccess):
    """
 DirectDBAccess class play a role as mysqlclient and provide methods to interact
 with TestResultWebApp's database.
@@ -60,8 +61,8 @@ Create object method to make singleton class ``DirectDBAccess``.
       """
 Initializer of class ``DirectDBAccess``.
       """
-      con      = None
-      db       = None
+      self.con = None
+      self.db = None
       self.lTestCases = []
 
    def __del__(self):

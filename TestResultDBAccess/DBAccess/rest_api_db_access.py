@@ -13,7 +13,7 @@
 #  limitations under the License.
 # ******************************************************************************
 #
-# File: RestApiDBAccess.py
+# File: rest_api_db_access.py
 #
 # Initialy created by Tran Duy Ngoan / March 2024
 #
@@ -27,7 +27,7 @@
 # ******************************************************************************
 
 import requests
-from .DBAccessInterface import DBAccess
+from .db_accesss_interface import DBAccess
 from requests_kerberos import HTTPKerberosAuth, OPTIONAL
 import ssl
 import tempfile
@@ -218,7 +218,7 @@ class RestApiDBAccess(DBAccess):
          "interpretation" : result_interpretation,
          "result_state" : "in progress"
       }
-      data = self.__post_request('results', req_result)
+      self.__post_request('results', req_result)
 
       return result_id
 
@@ -302,7 +302,7 @@ class RestApiDBAccess(DBAccess):
          "preprocessor_parameters" : preprocessor_parameters,
          "preprocessor_filter" : preprocessor_filter
       }
-      data = self.__post_request('fileheaders', req_fileheader)
+      self.__post_request('fileheaders', req_fileheader)
 
    def nCreateNewSingleTestCase(self, case_name,
                                       case_issue,

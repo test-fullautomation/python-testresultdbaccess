@@ -12,28 +12,27 @@
 % See the License for the specific language governing permissions and
 % limitations under the License.
 
-\pkg\ is a command-line tool that enables you to import \rfwcore\ XML result
-files into TestResultWebApp's database for presenting an overview about the
-whole test execution and details of each test result.
+The \pkg\ package is designed to streamline the process of importing test data 
+into the database of a test result web application. 
 
-\begin{figure}[h!]
-   \includegraphics[width=1\linewidth]{./pictures/data_flow.png}
-   \caption{Tool data flow}
-\end{figure}
+This package offers two distinct access methods: \textbf{Direct Access} and 
+\textbf{REST API Access}. 
 
-\pkg\ tool requires serveral arguments, including the location of the
-\href{https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#output-file}
-{\rfwcore\ XML result file(s)} to parse all information of test execution result
-and TestResultWebApp's database credential for importing that result.
+Users can seamlessly choose between these methods based on their preferences and 
+requirements.
 
-\href{https://github.com/test-fullautomation/testresultwebapp}{TestResultWebApp}
-requires some mandatory information to manage and display the test result properly.
-Therefore, they should be provided in \rfwcore\ test case before execution, then
-they will be available in XML result file for importing.
+\begin{itemize}
+    \item \textbf{Direct Access:} This method provides a direct connection to 
+          the database using the SQL protocol, allowing efficient data retrieval 
+          and import operations.
+    \item \textbf{REST API Access:} This method interacts with the web 
+          application via HTTP/HTTPS protocol, providing flexibility and 
+          compatibility with modern web architectures.
+\end{itemize}
 
-However, you can use optional arguments of \pkg\ tool to provide those data
-if they are missing or you want to overwrite them with the expected values.
+The package's DB Access Factory facilitates the creation of instances for both 
+\textbf{Direct Access} and \textbf{REST API Access}, ensuring a smooth and 
+adaptable workflow for importing test data into the target database. 
 
-Finally, \pkg\ also allows you to append existing results in the database, which
-is helpful when you need to update previous test results or add the missing
-XML result file(s) from previous tool execution.
+Whether users prefer direct database interaction or web-based API access, 
+\pkg\ offers a comprehensive solution to meet diverse testing needs.

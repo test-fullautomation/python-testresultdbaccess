@@ -1,2 +1,2 @@
-from .DirectDBAccess import DirectDBAccess
-from .RestApiDBAccess import RestApiDBAccess
+from .direct_db_accesss import DirectDBAccess
+from .rest_api_db_access import RestApiDBAccess

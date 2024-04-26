@@ -13,7 +13,7 @@
 #  limitations under the License.
 # ******************************************************************************
 #
-# File: DBAccessInterface.py
+# File: db_accesss_interface.py
 #
 # Initialy created by Tran Duy Ngoan / March 2024
 #

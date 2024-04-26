@@ -211,9 +211,6 @@ setuptools.setup(
         'install': ExtendedInstallCommand,
     },
     install_requires = oRepositoryConfig.Get('INSTALLREQUIRES'), # public package dependencies from PyPI
-    entry_points={
-        'console_scripts': oRepositoryConfig.Get('CONSOLESCRIPTS'),
-    },
     package_data={f"{oRepositoryConfig.Get('PACKAGENAME')}" : oRepositoryConfig.Get('PACKAGEDATA')}
 )
 # --------------------------------------------------------------------------------------------------------------

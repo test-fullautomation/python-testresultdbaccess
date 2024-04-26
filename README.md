@@ -1,6 +1,6 @@
-TestResultDBAccess ===========
+# TestResultDBAccess
 
-# Table of Contents
+## Table of Contents
 
 -   [Getting Started](#getting-started)
     -   [How to install](#how-to-install)
@@ -14,7 +14,7 @@ TestResultDBAccess ===========
     -   [Contributors](#contributors)
     -   [License](#license)
 
-# Getting Started
+## Getting Started
 
 **TestResultDBAccess** is a command-line tool that enables you to import
 [Robot Framework XML
@@ -27,7 +27,7 @@ detail of each test result.
 **TestResultDBAccess** tool is operating system independent and only
 works with Python 3.
 
-## How to install
+### How to install
 
 **TestResultDBAccess** can be installed in two different ways.
 
@@ -102,7 +102,7 @@ will be available (under *Scripts* folder of Python on Windows and
 In case above location is added to **PATH** environment variable then
 you can run it directly as operation system\'s command.
 
-# Usage
+## Usage
 
 **TestResultDBAccess** requires the Robot Framework result file(s) which
 contains the output result in XML format (default name is `output.xml`)
@@ -150,7 +150,7 @@ Besides the executable file, you can also run tool as a Python module
 
     python -m TestResultDBAccess <resultxmlfile> <server> <user> <password> <database>
 
-# Example
+## Example
 
 In order the import the Robot Framework result(s) to TestResultWebApp\'s
 database, we need the Robot Framework result file (`output.xml`).
@@ -185,7 +185,7 @@ for importing into TestResultWebApp\'s database:
        [Tags]   ISSUE-RTC-003   TCID-1002   FID-113
        Log       This is Testcase 01
 
-## Notes:
+### Notes:
 
 > In case you are using RobotFramework AIO, these below `Metadata`
 > definitions will be handled implicitly by [RobotFramework Testsuites
@@ -234,19 +234,19 @@ Datatable view:
 
 ![Datatable view](https://github.com/test-fullautomation/robotframework-robotlog2db/blob/develop/packagedoc/additional_docs/pictures/Datatable.png?raw=true)
 
-# Contribution
+## Contribution
 
 We are always searching support and you are cordially invited to help to
 improve **TestResultDBAccess** tool.
 
-# Sourcecode Documentation
+## Sourcecode Documentation
 
 To understand more detail about the tool\'s features, parameters and how
 Robot Framework testcase information will be displayed on
 TestResultWebApp, please refer to [TestResultDBAccess tool's
 Documentation](https://github.com/test-fullautomation/robotframework-robotlog2db/blob/develop/TestResultDBAccess/TestResultDBAccess.pdf).
 
-# Feedback
+## Feedback
 
 Please feel free to give any feedback to us via
 
@@ -255,15 +255,15 @@ Email to: [Thomas Pollerspöck](mailto:Thomas.Pollerspoeck@de.bosch.com)
 Issue tracking: [TestResultDBAccess
 Issues](https://github.com/test-fullautomation/robotframework-robotlog2db/issues)
 
-# About
+## About
 
-## Maintainers
+### Maintainers
 
 [Thomas Pollerspöck](mailto:Thomas.Pollerspoeck@de.bosch.com)
 
 [Tran Duy Ngoan](mailto:Ngoan.TranDuy@vn.bosch.com)
 
-## Contributors
+### Contributors
 
 [Nguyen Huynh Tri Cuong](mailto:Cuong.NguyenHuynhTri@vn.bosch.com)
 
@@ -273,7 +273,7 @@ Issues](https://github.com/test-fullautomation/robotframework-robotlog2db/issues
 
 [Holger Queckenstedt](mailto:Holger.Queckenstedt@de.bosch.com)
 
-## License
+### License
 
 Copyright 2020-2023 Robert Bosch GmbH
 
