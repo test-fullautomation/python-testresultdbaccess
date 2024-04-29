@@ -1,0 +1,29 @@
+@startuml
+
+left to right direction
+
+actor User
+usecase "Import Test Data" as ImportTool
+
+package "TestResultDBAccess" {
+   '  usecase "DB Access Factory" as DBAccessFactory
+   '  usecase "DB Access Interface" as DBAccessInterface
+    usecase "Direct Access" as DirectAccess
+    usecase "REST API Access" as RestAPIAccess
+   '  DBAccessFactory --> DBAccessInterface
+   '  DBAccessFactory --> DirectAccess
+   '  DBAccessFactory --> RestAPIAccess
+}
+
+package "TestResultWebapp" {
+    rectangle "Web Application" as WebApp
+    database "Database" as DB
+    WebApp -up-> DB
+}
+
+User --> ImportTool
+ImportTool --> TestResultDBAccess
+DirectAccess --> DB: sql protocol
+RestAPIAccess --> WebApp: http/https protocol
+
+@enduml

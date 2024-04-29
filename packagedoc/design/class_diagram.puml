@@ -1,0 +1,78 @@
+@startuml
+
+class DBAccessFactory {
+  + create(access_method: str): DBAccess
+}
+
+rectangle DBAccess{
+
+   interface DBAccessInterface {
+      + connect(host: str, user: str, passwd: str, database: str)
+      + disconnect()
+
+      + arGetCategories() : list
+      + bExistingResultID() : bool
+      + sGetLatestFileID() : str
+
+      + sCreateNewTestResult() : str
+      + nCreateNewFile() : int
+      + vCreateNewHeader()
+      + nCreateNewSingleTestCase() : int
+      + nCreateNewTestCase()
+      + vCreateAbortReason()
+      + vCreateCCRdata()
+      + vCreateTags()
+
+      + vCreateReanimation()
+      + vSetCategory()
+      + vUpdateFileEndTime()
+      + vUpdateResultEndTime()
+
+      + vUpdateEvtbl()
+      + vUpdateEvtbls()
+      + vFinishTestResult()
+   }
+   ' note right of DBAccess::disconnect
+   ' These methods establishes/destroy a connection to the database
+   ' end note
+
+   ' note right of DBAccess::sGetLatestFileID
+   ' These methods retrieve information for database
+   ' end note
+
+   ' note right of DBAccess::vCreateTags
+   ' These methods create new record(s) in database
+   ' end note
+
+   ' note right of DBAccess::vUpdateResultEndTime
+   ' These methods update existing record in database
+   ' end note
+
+   ' note right of DBAccess::vFinishTestResult
+   ' These methods call Stored Procedures of database
+   ' end note
+
+   class DirectDBAccess {
+      con : Connection
+      + connect(host: str, user: str, passwd: str, database: str, charset: str='utf8', use_unicode: bool=True)
+      + disconnect()
+      + ...()
+   }
+
+   class RestApiDBAccess {
+   session: Session
+   + connect(host: str, user: str, passwd: str, database: str)
+   + disconnect()
+   + ...()
+   }
+   ' note left of RestApiDBAccess::...
+   ' Implementation of DBAccess's methods
+   ' end note
+
+}
+
+DBAccessInterface <|.. DirectDBAccess
+DBAccessInterface <|.. RestApiDBAccess
+DBAccessFactory -right-> DBAccess
+
+@enduml
