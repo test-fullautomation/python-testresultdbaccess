@@ -188,7 +188,7 @@ print(COLBY + "Extended setup step 5/5: install.run(self)")
 print()
 
 setuptools.setup(
-    name         = str(oRepositoryConfig.Get('REPOSITORYNAME')),
+    name         = str(oRepositoryConfig.Get('PACKAGENAME')),
     version      = str(oRepositoryConfig.Get('PACKAGEVERSION')),
     author       = str(oRepositoryConfig.Get('AUTHOR')),
     author_email = str(oRepositoryConfig.Get('AUTHOREMAIL')),
