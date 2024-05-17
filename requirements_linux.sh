@@ -1,0 +1,1 @@
+sudo apt-get install -y libkrb5-dev

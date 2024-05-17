@@ -50,6 +50,15 @@ How to install
 
    * Install dependencies
 
+     **Notes:** Regarding the Linux environment (such as **Ubuntu**), there are Linux dependency 
+     packages that need to be installed before installing Python dependency libraries. 
+     Use the following commands to install them:
+
+     .. code::
+
+         chmod +x ./requirements_linux.sh
+         ./requirements_linux.sh
+
      **TestResultDBAccess** requires some additional Python libraries. Before you install the cloned repository sources
      you have to install the dependencies manually. The names of all related packages you can find in the file ``requirements.txt``
      in the repository root folder. Use pip to install them:
