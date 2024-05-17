@@ -31,7 +31,7 @@ depending on their specific needs and preferences.
     ```
 
     [TestResultDBAccess in
-    PyPi](https://pypi.org/project/python-testresultdbaccess/)
+    PyPi](https://pypi.org/project/TestResultDBAccess/)
 
 2.  Installation via GitHub (recommended for developers)
 

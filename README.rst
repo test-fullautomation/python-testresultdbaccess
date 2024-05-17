@@ -36,7 +36,7 @@ How to install
 
       pip install python-testresultdbaccess
 
-   `TestResultDBAccess in PyPi <https://pypi.org/project/python-testresultdbaccess/>`_
+   `TestResultDBAccess in PyPi <https://pypi.org/project/TestResultDBAccess/>`_
 
 2. Installation via GitHub (recommended for developers)
 
