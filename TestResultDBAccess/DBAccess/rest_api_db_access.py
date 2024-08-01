@@ -251,7 +251,7 @@ If the request is successful, the authorized session is reused for subsequent
          # Try with kerberos
          kerberos_auth = HTTPKerberosAuth(mutual_authentication=OPTIONAL)
          res = self.session.get("{}/loggedin".format(self.base_url), 
-                                auth=kerberos_auth, allow_redirects=True)
+                                auth=kerberos_auth, allow_redirects=True, verify=False)
          if res.status_code == 200:
             # Authorized session is reused for later requests
             return
