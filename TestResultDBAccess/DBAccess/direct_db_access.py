@@ -13,9 +13,9 @@
 #  limitations under the License.
 # *******************************************************************************
 #
-# File: direct_db_accesss.py
+# File: direct_db_access.py
 #
-# Initialy created by Pollerspoeck Thomas (CM/PJ-CMD) / June 2016
+# Initially created by Pollerspoeck Thomas (CM/PJ-CMD) / June 2016
 #
 # This class provides methods to interact with TestResultWebApp's database directly.
 #
@@ -25,14 +25,14 @@
 #  - initial version
 #
 # February 2022:
-#  - update sourcecode document
+#  - update source code document
 # 
 # March 2024:
-#  - rename file to direct_db_accesss due to DB interface feature of RobotLog2DB
+#  - rename file to direct_db_access due to DB interface feature of RobotLog2DB
 #
 # *******************************************************************************
 
-from .db_accesss_interface import DBAccessInterface
+from .db_access_interface import DBAccessInterface
 import MySQLdb as db
 
 class DirectDBAccess(DBAccessInterface):
@@ -226,13 +226,13 @@ Execute a query. By default don't try to fetch a result.
 
    / *Condition*: optional / *Type*: bool / *Default*: False /
 
-   If True, respsonse is expected.
+   If True, response is expected.
 
 *  ``bReturnInsertedID``
 
    / *Condition*: optional / *Type*: bool / *Default*: False /
 
-   If True, the lastrowid will be returned.
+   If True, the last row id will be returned.
 
 **Returns:**
 
@@ -240,7 +240,7 @@ Execute a query. By default don't try to fetch a result.
 
    / *Type*: list /
 
-   List of reponse data (or lastrowid if bReturnInsertedID is set).
+   List of response data (or last row id if bReturnInsertedID is set).
       """
       arRes = None
       c = self.con.cursor()
@@ -390,13 +390,13 @@ linked to all other data by means of ``test_result_id``.
 
    / *Condition*: required / *Type*: str /
 
-   Jenkinsurl in case test result is executed by jenkins.
+   Jenkins's url in case test result is executed by jenkins.
 
 *  ``_tbl_result_reporting_qualitygate``
 
    / *Condition*: required / *Type*: str /
 
-   Qualitygate information for reporting.
+   Quality gate information for reporting.
 
 **Returns:**
 
@@ -494,7 +494,7 @@ Create new file entry in ``tbl_file`` table.
 
    / *Condition*: required / *Type*: str /
 
-   Origin (test framework) of test file. Deafult is "ROBFW"
+   Origin (test framework) of test file. Default is "ROBFW"
 
 **Returns:**
 
@@ -700,13 +700,13 @@ Create a new header entry in ``tbl_file_header`` table which is linked with the 
 
    / *Condition*: required / *Type*: str /
 
-   Testbench configuration name.
+   Test bench configuration name.
 
 *  ``_tbl_header_testbenchconfig_data``
 
    / *Condition*: required / *Type*: str /
 
-   Testbench configuration data.
+   Test bench configuration data.
 
 *  ``_tbl_header_preprocessor_filter``
 
