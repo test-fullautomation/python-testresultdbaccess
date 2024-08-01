@@ -15,7 +15,7 @@
 #
 # File: rest_api_db_access.py
 #
-# Initialy created by Tran Duy Ngoan / March 2024
+# Initially created by Tran Duy Ngoan / March 2024
 #
 # This class provides methods to interact with TestResultWebApp's REST APIs.
 #
@@ -27,7 +27,7 @@
 # ******************************************************************************
 
 import requests
-from .db_accesss_interface import DBAccessInterface
+from .db_access_interface import DBAccessInterface
 from requests_kerberos import HTTPKerberosAuth, OPTIONAL
 import ssl
 import tempfile
@@ -306,7 +306,7 @@ Connects to the database via REST API using the provided credentials.
       except Exception as err:
          raise Exception("Failed to get public key. Reason: {}".format(err))
 
-      # Reponse payload with encrypted password
+      # Response payload with encrypted password
       req_body = {
          'usr': user,
          'pwd': self.encrypt_password(passwd, pubkey),
@@ -522,7 +522,7 @@ Creates a new test result.
 
    / *Condition*: required / *Type*: str /
 
-   Qualitygate information for reporting.
+   Quality gate information for reporting.
 
 **Returns:**
 
@@ -816,13 +816,13 @@ Create a new result file header.
 
    / *Condition*: required / *Type*: str /
 
-   Testbench configuration name.
+   Test bench configuration name.
 
 *  ``testbenchconfig_data``
 
    / *Condition*: required / *Type*: str /
 
-   Testbench configuration data.
+   Test bench configuration data.
 
 *  ``preprocessor_filter``
 

@@ -13,9 +13,9 @@
 #  limitations under the License.
 # ******************************************************************************
 #
-# File: db_accesss_interface.py
+# File: db_access_interface.py
 #
-# Initialy created by Tran Duy Ngoan / March 2024
+# Initially created by Tran Duy Ngoan / March 2024
 #
 # This interface defines required methods to access TestResultWebapp' database.
 #

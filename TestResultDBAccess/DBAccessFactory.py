@@ -15,7 +15,7 @@
 #
 # File: DBAccessFactory.py
 #
-# Initialy created by Tran Duy Ngoan / March 2024
+# Initially created by Tran Duy Ngoan / March 2024
 #
 # This factory helps to create the appropriate DBAccess interface 
 # due to given access method.
