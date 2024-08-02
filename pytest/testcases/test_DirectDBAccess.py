@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
 # from TestResultDBAccess.DBAccess import DirectDBAccess
-import TestResultDBAccess.DBAccess.direct_db_accesss
+import TestResultDBAccess.DBAccess.direct_db_access
 
 class Cursor:
    def __init__(self):
@@ -52,8 +52,8 @@ class Test_DirectDBAccess:
 
    @pytest.fixture
    def db_access(self):
-      TestResultDBAccess.DBAccess.direct_db_accesss.db = MockDB
-      db_access = TestResultDBAccess.DBAccess.direct_db_accesss.DirectDBAccess()
+      TestResultDBAccess.DBAccess.direct_db_access.db = MockDB
+      db_access = TestResultDBAccess.DBAccess.direct_db_access.DirectDBAccess()
       return db_access
 
    def test_connect(self, db_access):
