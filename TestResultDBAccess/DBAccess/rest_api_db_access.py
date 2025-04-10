@@ -245,7 +245,7 @@ Sends a PATCH request to the API endpoint specified by the resource and its id.
             options.binary_location = "/usr/bin/firefox"
             driver_bin = "geckodriver"
          else:
-            raise NotImplemented(f"Unsupported Webdriver for platform '{sys.platform}")
+            raise NotImplemented(f"Unsupported Webdriver for platform '{sys.platform}'")
          driver_path = f"{os.path.dirname(__file__)}/webdrivers/{sys.platform}/{driver_bin}"
 
          try:
@@ -263,7 +263,7 @@ Sends a PATCH request to the API endpoint specified by the resource and its id.
          except Exception as err:
             raise Exception("Cannot access API server with webdriver. Reason: {}".format(err))
          finally:
-            driver.close()
+            driver.quit()
 
       except Exception as err:
          raise Exception("Cannot access API server. Reason: {}".format(err))
