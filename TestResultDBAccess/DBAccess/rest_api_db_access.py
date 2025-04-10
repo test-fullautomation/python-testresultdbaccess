@@ -248,22 +248,25 @@ Sends a PATCH request to the API endpoint specified by the resource and its id.
             raise NotImplemented(f"Unsupported Webdriver for platform '{sys.platform}'")
          driver_path = f"{os.path.dirname(__file__)}/webdrivers/{sys.platform}/{driver_bin}"
 
+         driver = None
          try:
             service = Service(executable_path=driver_path)
             driver = webdriver.Firefox(service=service, options=options)
-            driver.get(url)
+            if driver:
+               driver.get(url)
 
-            # wait for url redirection completed
-            wait = WebDriverWait(driver, 10)
-            wait.until(lambda driver: driver.current_url == url)
-            self.cookies = driver.get_cookies()
-            if self.cookies:
-               for item in self.cookies:
-                  self.session.cookies.set(item['name'], item['value'])
+               # wait for url redirection completed
+               wait = WebDriverWait(driver, 10)
+               wait.until(lambda driver: driver.current_url == url)
+               self.cookies = driver.get_cookies()
+               if self.cookies:
+                  for item in self.cookies:
+                     self.session.cookies.set(item['name'], item['value'])
          except Exception as err:
             raise Exception("Cannot access API server with webdriver. Reason: {}".format(err))
          finally:
-            driver.quit()
+            if driver:
+               driver.quit()
 
       except Exception as err:
          raise Exception("Cannot access API server. Reason: {}".format(err))
