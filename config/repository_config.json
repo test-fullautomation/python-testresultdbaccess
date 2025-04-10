@@ -14,7 +14,7 @@
    "INTENDEDAUDIENCE" : "Intended Audience :: Developers",
    "TOPIC" : "Topic :: Software Development",
    "INSTALLREQUIRES" : ["mysqlclient","requests_kerberos"],
-   "PACKAGEDATA" : ["*.pdf", "DBAccess/*.py"],
+   "PACKAGEDATA" : ["*.pdf", "DBAccess/*.py", "DBAccess/webdrivers/**"],
    "PACKAGEDOC" : "./packagedoc",
    "CONSOLESCRIPTS": ""
 }

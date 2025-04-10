@@ -31,20 +31,25 @@ from .db_access_interface import DBAccessInterface
 from requests_kerberos import HTTPKerberosAuth, OPTIONAL
 import ssl
 import tempfile
-
+import os
+import sys
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.firefox.service import Service
+from selenium import webdriver
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
 disable_warnings(InsecureRequestWarning)
 
+
 class RestApiDBAccess(DBAccessInterface):
    """
-RestApiDBAccess class provide methods to interact with TestResultWebApp's REST 
+RestApiDBAccess class provide methods to interact with TestResultWebApp's REST
 APIs.
 
 This class implements the **DBAccessInterface** and extends it.
-It includes methods for connecting to the database, handling API requests, 
-creating, updating, and calling stored procedures in the database via RESTful 
-API calls. 
+It includes methods for connecting to the database, handling API requests,
+creating, updating, and calling stored procedures in the database via RESTful
+API calls.
    """
 
    def __init__(self):
@@ -63,10 +68,10 @@ Initializes the RestApiDBAccess instance.
          self.session.verify = self.certs_file
       else:
          self.session.verify = False
-   
+
    def get_certs_file(self):
       """
-Retrieves SSL certificates and saves them to a temporary file for request's 
+Retrieves SSL certificates and saves them to a temporary file for request's
 verification.
 
 **Returns:**
@@ -75,11 +80,11 @@ verification.
 
    The path to the temporary file containing SSL certificates.
       """
-      context = ssl.create_default_context() 
-      der_certs = context.get_ca_certs(binary_form=True) 
-      pem_certs = [ssl.DER_cert_to_PEM_cert(der) for der in der_certs] 
+      context = ssl.create_default_context()
+      der_certs = context.get_ca_certs(binary_form=True)
+      pem_certs = [ssl.DER_cert_to_PEM_cert(der) for der in der_certs]
       if len(pem_certs):
-         with tempfile.NamedTemporaryFile(mode='w', delete=False) as outfile: 
+         with tempfile.NamedTemporaryFile(mode='w', delete=False) as outfile:
             path2pem = outfile.name
             for pem in pem_certs:
                outfile.write("{}\n".format(pem))
@@ -98,13 +103,13 @@ Encrypts a password using a public key.
 *  ``password``
 
    / *Type*: str /
-   
+
    The password to encrypt.
 
 *  ``pubkey``
 
    / *Type*: str /
-   
+
    The public key used for encryption.
 
 **Returns:**
@@ -119,7 +124,7 @@ Encrypts a password using a public key.
       from base64 import b64encode
 
       try:
-         keyPub = serialization.load_pem_public_key(pubkey.encode('utf-8'), 
+         keyPub = serialization.load_pem_public_key(pubkey.encode('utf-8'),
                                                     backend=default_backend())
          encypted_Data = keyPub.encrypt(
             password.encode('utf-8'),
@@ -149,14 +154,14 @@ Sends a GET request to the API endpoint specified by the resource.
    The response data if the request is successful.
    Otherwise returns ``None``.
       """
-      res = self.session.get("{}/{}".format(self.base_url, resource), 
+      res = self.session.get("{}/{}".format(self.base_url, resource),
                              allow_redirects=True)
       if res.status_code == 200 and res.json()['success']:
          return res.json()['data']
       else:
          # raise Exception(res.json()['message'])
          return None
-   
+
    def __post_request(self, resource, payload=None):
       """
 Sends a POST request to the API endpoint specified by the resource.
@@ -182,8 +187,8 @@ Sends a POST request to the API endpoint specified by the resource.
    The response data if the request is successful.
    Otherwise raise Exception with error message.
       """
-      res = self.session.post("{}/{}".format(self.base_url, resource), 
-                              json=payload, 
+      res = self.session.post("{}/{}".format(self.base_url, resource),
+                              json=payload,
                               allow_redirects=True)
       if res.status_code == 201 and res.json()['success']:
          return res.json()['data']
@@ -221,20 +226,57 @@ Sends a PATCH request to the API endpoint specified by the resource and its id.
    The response data if the request is successful.
    Otherwise raise Exception with error message.
       """
-      res = self.session.patch("{}/{}/{}".format(self.base_url, resource, resource_id), 
+      res = self.session.patch("{}/{}/{}".format(self.base_url, resource, resource_id),
                                json=payload, allow_redirects=True)
-      
+
       if res.status_code == 200 and res.json()['success']:
          return res.json()['data']
       else:
          raise Exception(res.json()['message'])
 
+   def __get_cookies_via_webdriver(self, url):
+      try:
+         options = webdriver.FirefoxOptions()
+         options.add_argument("--headless")
+         if sys.platform.lower() == "win32":
+            options.binary_location = os.getenv('ProgramW6432', '')+"/Mozilla Firefox/firefox.exe"
+            driver_bin = "geckodriver.exe"
+         elif sys.platform.lower() == "linux":
+            options.binary_location = "/usr/bin/firefox"
+            driver_bin = "geckodriver"
+         else:
+            raise NotImplemented(f"Unsupported Webdriver for platform '{sys.platform}'")
+         driver_path = f"{os.path.dirname(__file__)}/webdrivers/{sys.platform}/{driver_bin}"
+
+         driver = None
+         try:
+            service = Service(executable_path=driver_path)
+            driver = webdriver.Firefox(service=service, options=options)
+            if driver:
+               driver.get(url)
+
+               # wait for url redirection completed
+               wait = WebDriverWait(driver, 10)
+               wait.until(lambda driver: driver.current_url == url)
+               self.cookies = driver.get_cookies()
+               if self.cookies:
+                  for item in self.cookies:
+                     self.session.cookies.set(item['name'], item['value'])
+         except Exception as err:
+            raise Exception("Cannot access API server with webdriver. Reason: {}".format(err))
+         finally:
+            if driver:
+               driver.quit()
+
+      except Exception as err:
+         raise Exception("Cannot access API server. Reason: {}".format(err))
+
    def __get_wam_cookies(self):
       """
 Try to obtain authentication to the REST API (behind an SSO system) via Kerberos.
 
-This method sends a GET request to the '/loggedin' endpoint of the API using 
-Kerberos authentication to obtain the necessary cookies for authentication. 
+This method sends a GET request to the '/loggedin' endpoint of the API using
+Kerberos authentication to obtain the necessary cookies for authentication.
 
 If the request is successful, the authorized session is reused for subsequent
  requests.
@@ -250,13 +292,16 @@ If the request is successful, the authorized session is reused for subsequent
       try:
          # Try with kerberos
          kerberos_auth = HTTPKerberosAuth(mutual_authentication=OPTIONAL)
-         res = self.session.get("{}/loggedin".format(self.base_url), 
-                                auth=kerberos_auth, allow_redirects=True, verify=False)
+         # kerberos_auth = HTTPKerberosAuth(mutual_authentication=OPTIONAL, force_preemptive=True)
+         res = self.session.get("{}/loggedin".format(self.base_url), auth=kerberos_auth, allow_redirects=True, verify=False)
          if res.status_code == 200:
             # Authorized session is reused for later requests
             return
       except Exception as err:
          raise Exception("Cannot access API server. Reason: {}".format(err))
+
+      # Try to get cookies by using webdriver of kerberos request is not successful
+      self.__get_cookies_via_webdriver("{}/loggedin".format(self.base_url))
 
    # Implementation of interface's methods
    #
@@ -298,7 +343,7 @@ Connects to the database via REST API using the provided credentials.
 
       self.__get_wam_cookies()
       try:
-         res = self.session.get("{}/getPubKey".format(self.base_url), 
+         res = self.session.get("{}/getPubKey".format(self.base_url),
                                 allow_redirects=True)
          # print res.status_code
          pubkey = res.json()['pubKey']
@@ -410,7 +455,7 @@ Get latest file ID of all result or given ``result_id``.
          return data['id']
       else:
          raise Exception("Cannot get latest file_id")
-   
+
    def arGetProjectVersionSWByID(self, result_id):
       """
 Get the project and version_sw information of given ``result_id``
@@ -427,7 +472,7 @@ Get the project and version_sw information of given ``result_id``
 
 *  / *Type*: tuple /
 
-   None if test result UUID is not existing, else the tuple which contains 
+   None if test result UUID is not existing, else the tuple which contains
    project and version_sw: (project, variant) is returned.
       """
       data = self.__get_request('results/{}'.format(result_id))
@@ -436,7 +481,7 @@ Get the project and version_sw information of given ``result_id``
       return None
 
    # Methods to create new record(s) (POST) in database
-   def sCreateNewTestResult(self, project, variant, branch, 
+   def sCreateNewTestResult(self, project, variant, branch,
                                   result_id,
                                   result_interpretation,
                                   result_start_time,
@@ -540,7 +585,7 @@ Creates a new test result.
             "branch": branch
          }
          self.__post_request('projects', req_prj)
-      
+
       req_result = {
          "test_result_id" : result_id,
          "project" : project,
@@ -644,7 +689,7 @@ Create new result file.
                               testtoolconfiguration_ctrlfilepath,
                               testtoolconfiguration_configfile,
                               testtoolconfiguration_confname,
-                           
+
                               testfileheader_author,
                               testfileheader_project,
                               testfileheader_testfiledate,
@@ -655,10 +700,10 @@ Create new result file.
                               testfileheader_shortdescription,
                               testexecution_useraccount,
                               testexecution_computername,
-                           
+
                               testrequirements_documentmanagement,
                               testrequirements_testenvironment,
-                           
+
                               testbenchconfig_name,
                               testbenchconfig_data,
                               preprocessor_filter,
@@ -1011,8 +1056,8 @@ Create single test case.
 
    def nCreateNewTestCase(self, *args):
       """
-Alias for nCreateNewSingleTestCase, used in older import tools to import a bulk 
-of test cases at once. 
+Alias for nCreateNewSingleTestCase, used in older import tools to import a bulk
+of test cases at once.
       """
       return self.nCreateNewSingleTestCase(*args)
 
