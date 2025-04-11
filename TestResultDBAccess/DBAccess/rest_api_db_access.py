@@ -308,7 +308,9 @@ If the request is successful, the authorized session is reused for subsequent
       res = self.session.get("{}/getPubKey".format(self.base_url), allow_redirects=True, verify=self.session.verify)
       pubkey = None
       if res.status_code == 200:   # print res.status_code
-         pubkey = res.json()['pubKey']
+         pubkey = res.json().get('pubKey')
+         if pubkey is None:
+            raise Exception("The 'pubKey' key is missing in the API response.")
       return pubkey
    # Implementation of interface's methods
    #
