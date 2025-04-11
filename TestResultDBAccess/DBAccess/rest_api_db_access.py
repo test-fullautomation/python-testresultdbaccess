@@ -37,6 +37,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.service import Service
 from selenium import webdriver
 from urllib3.exceptions import InsecureRequestWarning
+from requests.exceptions import SSLError
 from urllib3 import disable_warnings
 disable_warnings(InsecureRequestWarning)
 
@@ -155,7 +156,7 @@ Sends a GET request to the API endpoint specified by the resource.
    Otherwise returns ``None``.
       """
       res = self.session.get("{}/{}".format(self.base_url, resource),
-                             allow_redirects=True)
+                             allow_redirects=True, verify=self.session.verify)
       if res.status_code == 200 and res.json()['success']:
          return res.json()['data']
       else:
@@ -188,7 +189,7 @@ Sends a POST request to the API endpoint specified by the resource.
    Otherwise raise Exception with error message.
       """
       res = self.session.post("{}/{}".format(self.base_url, resource),
-                              json=payload,
+                              json=payload, verify=self.session.verify,
                               allow_redirects=True)
       if res.status_code == 201 and res.json()['success']:
          return res.json()['data']
@@ -227,7 +228,7 @@ Sends a PATCH request to the API endpoint specified by the resource and its id.
    Otherwise raise Exception with error message.
       """
       res = self.session.patch("{}/{}/{}".format(self.base_url, resource, resource_id),
-                               json=payload, allow_redirects=True)
+                               json=payload, allow_redirects=True, verify=self.session.verify)
 
       if res.status_code == 200 and res.json()['success']:
          return res.json()['data']
@@ -303,6 +304,12 @@ If the request is successful, the authorized session is reused for subsequent
       # Try to get cookies by using webdriver of kerberos request is not successful
       self.__get_cookies_via_webdriver("{}/loggedin".format(self.base_url))
 
+   def __get_pubkey(self):
+      res = self.session.get("{}/getPubKey".format(self.base_url), allow_redirects=True, verify=self.session.verify)
+      pubkey = None
+      if res.status_code == 200:   # print res.status_code
+         pubkey = res.json()['pubKey']
+      return pubkey
    # Implementation of interface's methods
    #
    def connect(self, host, user, passwd, database, *args):
@@ -342,12 +349,16 @@ Connects to the database via REST API using the provided credentials.
       self.base_url = "{}/{}".format(host, database)
 
       self.__get_wam_cookies()
+      pubkey = None
       try:
-         res = self.session.get("{}/getPubKey".format(self.base_url),
-                                allow_redirects=True)
-         # print res.status_code
-         pubkey = res.json()['pubKey']
-
+         pubkey = self.__get_pubkey()
+      except SSLError:
+         #Try to request again without certificates
+         self.session.verify = False
+         try:
+            pubkey = self.__get_pubkey()
+         except Exception as err:
+            raise Exception("Failed to get public key. Reason: {}".format(err))
       except Exception as err:
          raise Exception("Failed to get public key. Reason: {}".format(err))
 
@@ -358,7 +369,7 @@ Connects to the database via REST API using the provided credentials.
          'dom': '',
       }
 
-      res = self.session.post("{}/login".format(self.base_url), allow_redirects=True, json=req_body)
+      res = self.session.post("{}/login".format(self.base_url), allow_redirects=True, json=req_body, verify=self.session.verify)
       if res.json()['data'] == "login_success":
          print("  > Login successfully!")
       else:
@@ -376,7 +387,7 @@ Disconnect from TestResultWebApp's database.
 
 (*no returns*)
       """
-      res = self.session.get(self.base_url+'/logout', allow_redirects=True)
+      res = self.session.get(self.base_url+'/logout', allow_redirects=True, verify=self.session.verify)
       if res.status_code == 200:
          print("  > Logout successfully!")
       else:
