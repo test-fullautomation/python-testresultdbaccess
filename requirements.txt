@@ -4,3 +4,4 @@ GenPackageDoc
 PythonExtensionsCollection
 mysqlclient
 requests_kerberos
+selenium
