@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools==79.0.1", "wheel", "colorama==0.4.6", "pypandoc_binary==1.15", "PythonExtensionsCollection"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "TestResultDBAccess"
+version = "0.1.6"
+description = "Interfaces to access TestResultWebApp database"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "Apache-2.0"
+authors = [
+    {name = "Tran Duy Ngoan", email = "Ngoan.TranDuy@vn.bosch.com"}
+]
+keywords = ["Database", "Test Results", "Web Application"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "mysqlclient",
+    "requests_kerberos",
+]
+
+[project.urls]
+Homepage = "https://github.com/test-fullautomation/python-testresultdbaccess"
+Repository = "https://github.com/test-fullautomation/python-testresultdbaccess"
+
+[tool.setuptools]
+packages = [
+    "TestResultDBAccess",
+    "TestResultDBAccess.DBAccess",
+    "TestResultDBAccess.DBAccess.webdrivers",
+    "TestResultDBAccess.DBAccess.webdrivers.linux",
+    "TestResultDBAccess.DBAccess.webdrivers.win32",
+]
+
+[tool.setuptools.package-data]
+TestResultDBAccess = [
+    "*.pdf",
+    "DBAccess/*.py",
+    "DBAccess/webdrivers/**",
+]
