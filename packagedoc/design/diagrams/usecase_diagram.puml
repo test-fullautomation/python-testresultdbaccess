@@ -1,0 +1,26 @@
+@startuml
+title Use Case Diagram for Test Result DB Access
+left to right direction
+
+actor User
+
+usecase "Import Test Data" as ImportTool
+
+rectangle "TestResultDBAccess" {
+    usecase "REST API Access" as RestAPIAccess
+    usecase "Direct Access" as DirectAccess
+}
+
+rectangle "TestResult Server" {
+    rectangle "Web Application" as WebApp
+    database "Database" as DB
+}
+
+User --> ImportTool
+ImportTool --> RestAPIAccess
+ImportTool --> DirectAccess
+DirectAccess --> DB: sql protocol
+RestAPIAccess --> WebApp: https protocol
+WebApp -up-> DB
+
+@enduml

@@ -1,0 +1,53 @@
+@startuml overview
+title Test Result DB Access and Web Application Overview
+
+left to right direction
+
+skinparam rectangle {
+   BackgroundColor<<testnode>> LightYellow
+   BackgroundColor<<dbaccess>> LightGray
+   BackgroundColor<<server>> LightBlue
+}
+
+rectangle "TestNode1" <<testnode>>{
+   rectangle "RobotFramework" {
+   }
+   rectangle "RobotLog2DB" {
+   }
+}
+rectangle "TestNode2" <<testnode>> {
+   rectangle "PyTestFramework" {
+   }
+   rectangle "PyTestLog2DB" {
+   }
+}
+rectangle "TestResultDBAccess" <<dbaccess>>{
+   rectangle "DBAccessInterface" {
+   }
+   rectangle "RestApiDBAccess" {
+   }
+   rectangle "DirectDBAccess" {
+   }
+}
+rectangle "TestResultWebapp" <<server>> {
+   rectangle "WebApplication" {
+   }
+   rectangle "Database" {
+   }
+}
+
+' Test Nodes
+RobotFramework --> RobotLog2DB
+PyTestFramework --> PyTestLog2DB
+RobotLog2DB --> DBAccessInterface
+PyTestLog2DB --> DBAccessInterface
+
+' DB Access
+DBAccessInterface <|-- DirectDBAccess
+DBAccessInterface <|-- RestApiDBAccess
+
+' Server Connections
+DirectDBAccess --> Database : sql protocol
+RestApiDBAccess --> WebApplication : https protocol
+WebApplication -right-> Database
+@enduml

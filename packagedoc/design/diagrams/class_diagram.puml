@@ -1,12 +1,15 @@
 @startuml
 
+title Class Diagram for Test Result DB Access
+left to right direction
+
 class DBAccessFactory {
   + create(access_method: str): DBAccess
 }
 
-rectangle DBAccess{
+package DBAccess {
 
-   interface DBAccessInterface {
+   abstract class DBAccessInterface <<abstract>> {
       + connect(host: str, user: str, passwd: str, database: str)
       + disconnect()
 

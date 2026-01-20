@@ -1,0 +1,41 @@
+@startuml
+title Component Diagram for Test Result DB Access
+left to right direction
+
+package "RobotLog2DBTool" {
+   component "RobotLog2DB" {
+   }
+}
+
+package "PyTestLog2DBTool" {
+   component "PyTestLog2DB" {
+   }
+}
+
+package "TestResultWebapp" {
+   component "WebApp" {
+      [WebApplication]
+      [Database]
+   }
+
+}
+
+package "TestResultDBAccess" {
+   component "DBAccess" {
+      [DirectDBAccess]
+      [RestApiDBAccess]
+      [DBAccessInterface]
+   }
+
+   component "DBAccessFactory" {
+   }
+}
+RobotLog2DB --> DBAccessFactory
+PyTestLog2DB --> DBAccessFactory
+DBAccessFactory --> DBAccessInterface
+DBAccessInterface <|-- DirectDBAccess
+DBAccessInterface <|-- RestApiDBAccess
+DirectDBAccess --> Database : sql protocol
+RestApiDBAccess --> WebApplication : http/https protocol
+WebApplication -right-> Database
+@enduml
