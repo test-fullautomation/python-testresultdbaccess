@@ -2,40 +2,61 @@
 title Component Diagram for Test Result DB Access
 left to right direction
 
-package "RobotLog2DBTool" {
-   component "RobotLog2DB" {
-   }
+skinparam package {
+   BackgroundColor<<testnode>> LightYellow
+   BackgroundColor<<dbaccess>> LightGray
+   BackgroundColor<<server>> LightBlue
 }
 
-package "PyTestLog2DBTool" {
-   component "PyTestLog2DB" {
-   }
+package "RobotLog2DBTool" <<testnode>>{
+   component "RobotParser"
+   component "RobotTestResultBackend"
+   component "RobotLog2DB"
 }
 
-package "TestResultWebapp" {
-   component "WebApp" {
-      [WebApplication]
-      [Database]
-   }
-
+package "PyTestLog2DBTool" <<testnode>> {
+   component "PyTestParser"
+   component "PyTestResultBackend"
+   component "PyTestLog2DB"
 }
 
-package "TestResultDBAccess" {
-   component "DBAccess" {
-      [DirectDBAccess]
-      [RestApiDBAccess]
-      [DBAccessInterface]
+package "TestResultWebapp" <<server>>{
+   component "WebApplication" #LightSkyBlue{
+      [WebInterface]
+      [RESTAPI]
+      [DBService]
    }
-
-   component "DBAccessFactory" {
-   }
+   component Database
 }
-RobotLog2DB --> DBAccessFactory
-PyTestLog2DB --> DBAccessFactory
-DBAccessFactory --> DBAccessInterface
-DBAccessInterface <|-- DirectDBAccess
-DBAccessInterface <|-- RestApiDBAccess
-DirectDBAccess --> Database : sql protocol
-RestApiDBAccess --> WebApplication : http/https protocol
-WebApplication -right-> Database
+
+package "TestResultDBAccess" <<dbaccess>>{
+   component "DBAccessInterface"
+   component "DirectDBAccess"
+   component "RestApiDBAccess"
+   component "DBAccessFactory"
+}
+
+' Tool flow
+RobotLog2DB --> RobotParser
+RobotLog2DB --> RobotTestResultBackend
+RobotTestResultBackend ..> DBAccessFactory : uses
+
+PyTestLog2DB --> PyTestParser
+PyTestLog2DB --> PyTestResultBackend
+PyTestResultBackend ..> DBAccessFactory : uses
+
+' Factory / interface / implementations
+DBAccessFactory ..> DBAccessInterface : returns
+DBAccessInterface <|.. RestApiDBAccess
+DBAccessInterface <|.. DirectDBAccess
+
+' Access flow
+DirectDBAccess --> Database : SQL
+RestApiDBAccess --> RESTAPI : HTTP/HTTPS
+
+' Internal WebApp connections
+WebInterface --> DBService : service calls
+RESTAPI --> DBService : API calls
+DBService o-left- Database : SQL / transactions
+
 @enduml

@@ -1,0 +1,64 @@
+@startuml
+title Class Diagram for Test Result DB Access
+left to right direction
+
+package TestResultDBAccess {
+
+class DBAccessFactory {
+  + create(access_method: str): DBAccessInterface
+}
+
+package DBAccess {
+
+   abstract class DBAccessInterface <<abstract>> {
+      + connect(host: str, user: str, passwd: str, database: str)
+      + disconnect()
+
+      ' Retrieve info
+      + arGetCategories() : list
+      + bExistingResultID() : bool
+      + sGetLatestFileID() : str
+
+      ' Create records
+      + sCreateNewTestResult() : str
+      + nCreateNewFile() : int
+      + vCreateNewHeader()
+      + nCreateNewSingleTestCase() : int
+      + nCreateNewTestCase()
+      + vCreateAbortReason()
+      + vCreateCCRdata()
+      + vCreateTags()
+
+      ' Update records
+      + vCreateReanimation()
+      + vSetCategory()
+      + vUpdateFileEndTime()
+      + vUpdateResultEndTime()
+      + vUpdateEvtbl()
+      + vUpdateEvtbls()
+      + vFinishTestResult()
+   }
+
+   class DirectDBAccess {
+      - con : Connection
+      + connect(host: str, user: str, passwd: str, database: str, charset: str='utf8', use_unicode: bool=True)
+      + disconnect()
+      + override DBAccessInterface methods
+   }
+
+   class RestApiDBAccess {
+      - session : Session
+      + connect(host: str, user: str, passwd: str, database: str)
+      + disconnect()
+      + override DBAccessInterface methods
+   }
+
+}
+
+DBAccessInterface <|.. DirectDBAccess
+DBAccessInterface <|.. RestApiDBAccess
+DBAccessFactory ..> DBAccessInterface : returns
+
+}
+
+@enduml

@@ -10,13 +10,13 @@ skinparam rectangle {
 }
 
 rectangle "TestNode1" <<testnode>>{
-   rectangle "RobotFramework" {
+   rectangle "RobotFramework\nTest Result" as RobotFramework{
    }
    rectangle "RobotLog2DB" {
    }
 }
 rectangle "TestNode2" <<testnode>> {
-   rectangle "PyTestFramework" {
+   rectangle "PyTestFramework\nTest Result" as PyTestFramework{
    }
    rectangle "PyTestLog2DB" {
    }

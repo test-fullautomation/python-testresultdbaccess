@@ -1,26 +1,53 @@
 @startuml
 title Use Case Diagram for Test Result DB Access
-left to right direction
+' left to right direction
+skinparam actorStyle "rounded"
 
-actor User
 
-usecase "Import Test Data" as ImportTool
+actor "User/Customer" as User
+actor "Tester/CT System" as Tester
 
-rectangle "TestResultDBAccess" {
+usecase "Import Test Result" as ImportTestResult
+
+usecase "View Test Result" as ViewTestResult
+
+' Import Tool Package
+rectangle "Import Tool" as ImportTool #LightGray {
+    usecase "Parse Test Result" as ParseTestResult
+    usecase "Access DB" as AccessDB
     usecase "REST API Access" as RestAPIAccess
     usecase "Direct Access" as DirectAccess
 }
 
-rectangle "TestResult Server" {
-    rectangle "Web Application" as WebApp
+' TestResult Server
+rectangle "Server" as Server #lightblue {
+    Cloud "Web Application" as WebApp  {
+        rectangle "Web Interface" as WebInterface
+        rectangle "REST API" as RestAPI
+        rectangle "DB Service" as DBService
+    }
+
     database "Database" as DB
 }
 
-User --> ImportTool
-ImportTool --> RestAPIAccess
-ImportTool --> DirectAccess
-DirectAccess --> DB: sql protocol
-RestAPIAccess --> WebApp: https protocol
-WebApp -up-> DB
+' Actor Connections
+User --> ViewTestResult
+ViewTestResult --> WebInterface
+Tester --> ImportTestResult
+
+' Import Tool Connections
+ImportTestResult --> ParseTestResult
+ParseTestResult -left-> AccessDB
+AccessDB .left.> RestAPIAccess : <<include>>
+AccessDB ..> DirectAccess : <<include>>
+DirectAccess -left-> DB: sql protocol\n <<port:3306>>
+
+' Server Connections
+RestAPIAccess -left-> RestAPI: https protocol\n <<port:443>>
+
+' Internal Server Connections
+RestAPI --> DBService
+WebInterface --> DBService
+DBService --> DB
 
 @enduml

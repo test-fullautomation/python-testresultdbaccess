@@ -1,0 +1,38 @@
+@startuml
+title Layered Architecture Diagram for Rest API
+
+actor "Test Result Import Tool\n or Web Interface" as Client
+
+skinparam PackageStyle Frame
+
+rectangle "REST API" {
+   package "Routes (api/routes)" as Routes #LightBlue {
+   }
+
+   package "Controllers (api/controllers)" as Controllers  #LightGreen {
+   }
+
+   package "Service (api/services)" as Service #LightYellow {
+   }
+}
+
+rectangle "Web Application" {
+   package "Authentication" as Auth#LightPink {
+   }
+   package "Database" as DBAccess #LightGray {
+   }
+}
+
+'=============================
+' Database
+'=============================
+database "Database" #LightGray
+
+Client --> Routes : HTTP/HTTPS requests
+Routes --> Controllers
+Routes -right-> Auth : Auth Middleware
+Controllers --> Service
+Service -right-> DBAccess : SQL / Query
+DBAccess --> Database : SQL Protocol
+Auth -[Hidden]down-> DBAccess
+@enduml

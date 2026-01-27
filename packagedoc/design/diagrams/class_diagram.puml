@@ -1,81 +1,42 @@
 @startuml
+title Overview Class Diagram for Test Result DB Access
 
-title Class Diagram for Test Result DB Access
 left to right direction
 
-class DBAccessFactory {
-  + create(access_method: str): DBAccess
+' Tools
+package "RobotLog2DBTool" {
+    class RobotLog2DB
 }
 
-package DBAccess {
-
-   abstract class DBAccessInterface <<abstract>> {
-      + connect(host: str, user: str, passwd: str, database: str)
-      + disconnect()
-
-      + arGetCategories() : list
-      + bExistingResultID() : bool
-      + sGetLatestFileID() : str
-
-      + sCreateNewTestResult() : str
-      + nCreateNewFile() : int
-      + vCreateNewHeader()
-      + nCreateNewSingleTestCase() : int
-      + nCreateNewTestCase()
-      + vCreateAbortReason()
-      + vCreateCCRdata()
-      + vCreateTags()
-
-      + vCreateReanimation()
-      + vSetCategory()
-      + vUpdateFileEndTime()
-      + vUpdateResultEndTime()
-
-      + vUpdateEvtbl()
-      + vUpdateEvtbls()
-      + vFinishTestResult()
-   }
-   ' note right of DBAccess::disconnect
-   ' These methods establishes/destroy a connection to the database
-   ' end note
-
-   ' note right of DBAccess::sGetLatestFileID
-   ' These methods retrieve information for database
-   ' end note
-
-   ' note right of DBAccess::vCreateTags
-   ' These methods create new record(s) in database
-   ' end note
-
-   ' note right of DBAccess::vUpdateResultEndTime
-   ' These methods update existing record in database
-   ' end note
-
-   ' note right of DBAccess::vFinishTestResult
-   ' These methods call Stored Procedures of database
-   ' end note
-
-   class DirectDBAccess {
-      con : Connection
-      + connect(host: str, user: str, passwd: str, database: str, charset: str='utf8', use_unicode: bool=True)
-      + disconnect()
-      + ...()
-   }
-
-   class RestApiDBAccess {
-   session: Session
-   + connect(host: str, user: str, passwd: str, database: str)
-   + disconnect()
-   + ...()
-   }
-   ' note left of RestApiDBAccess::...
-   ' Implementation of DBAccess's methods
-   ' end note
-
+package "PyTestLog2DBTool" {
+    class PyTestLog2DB
 }
 
+' DB Access Layer
+package "TestResultDBAccess" {
+    class DBAccessInterface <<interface>>
+    class DirectDBAccess
+    class RestApiDBAccess
+    class DBAccessFactory
+}
+
+' REST API (part of WebApplication)
+package "TestResultWebapp" {
+    class RESTAPI
+}
+
+' Tool calls Factory
+RobotLog2DB ..> DBAccessFactory : create()
+PyTestLog2DB ..> DBAccessFactory : create()
+
+' Factory returns interface
+DBAccessFactory ..> DBAccessInterface : returns
+
+' DB Access realization
 DBAccessInterface <|.. DirectDBAccess
 DBAccessInterface <|.. RestApiDBAccess
-DBAccessFactory -right-> DBAccess
+
+' REST API calls / implements DB access
+RestApiDBAccess --> RESTAPI : HTTP/HTTPS
 
 @enduml

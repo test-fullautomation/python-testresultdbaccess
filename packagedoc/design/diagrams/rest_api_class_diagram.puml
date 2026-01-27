@@ -1,0 +1,111 @@
+@startuml
+title REST API - Class Diagram
+left to right direction
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+package "Web Application" {
+   class Auth{
+      +login(req, res)
+      +logout(req, res)
+   }
+
+   class mysqlPool{
+      +getConnection()
+   }
+
+   class global{
+      +config
+   }
+}
+package "Routes Layer" {
+   class projectRoutes
+   class resultRoutes
+   class fileRoutes
+   class testcaseRoutes
+   class userResultRoutes
+   class abortRoutes
+   class ccrRoutes
+   class fileHeaderRoutes
+   class storeProcedureRoutes
+   class categoryRoutes
+   class auth
+}
+
+package "Controller Layer" {
+   class ResourceController {
+      +name: String
+      +table: String
+      +identifier: String
+      +createShema: Joi.Schema
+      +updateSchema: Joi.Schema
+      +querySchema: Joi.Schema
+      +service: DBService
+      +get(req, res)
+      +getAll(req, res)
+      +getByID(req, res)
+      +getLast(req, res)
+      +getByQuery(req, res)
+      +create(req, res)
+      +updateByID(req, res)
+      +deleteByID(req, res)
+      +notImplementedMethod(req, res)
+   }
+   object "abortController : ResourceController" as abort
+   object "resultController : ResourceController" as result
+   object "fileController : ResourceController" as file
+   object "ccrController : ResourceController" as ccr
+   object "testcaseController : ResourceController" as testcase
+   object "userResultController : ResourceController" as userResult
+   object "fileHeaderController : ResourceController" as fileHeader
+   object "storeProcedureController : ResourceController" as storeProcedure
+   object "categoryController : ResourceController" as category
+   object "projectController : ResourceController" as project
+}
+
+package "Services Layer" {
+   class DBService {
+      +resource: String
+      +table: String
+      +identifier: String
+      +getAllResources(cb)
+      +getByReqQuery(req, cb)
+      +getResourceByID(id, cb)
+      +getLast(req, cb)
+      +createResource(data, cb)
+      +updateResourceByID(id, data, cb)
+      +deleteResourceByID(id, cb)
+   }
+}
+' Relationships
+ResourceController *-- DBService : "composition"
+
+' Controller Instantiation
+abort ..> ResourceController : <<instantiate>>
+result ..> ResourceController : <<instantiate>>
+file ..> ResourceController : <<instantiate>>
+ccr ..> ResourceController : <<instantiate>>
+testcase ..> ResourceController : <<instantiate>>
+userResult ..> ResourceController : <<instantiate>>
+fileHeader ..> ResourceController : <<instantiate>>
+storeProcedure ..> ResourceController : <<instantiate>>
+category ..> ResourceController : <<instantiate>>
+project ..> ResourceController : <<instantiate>>
+
+' Routes to Controllers
+abortRoutes ..> abort : "uses"
+resultRoutes ..> result : "uses"
+fileRoutes ..> file : "uses"
+ccrRoutes ..> ccr : "uses"
+testcaseRoutes ..> testcase : "uses"
+userResultRoutes ..> userResult : "uses"
+fileHeaderRoutes ..> fileHeader : "uses"
+storeProcedureRoutes ..> storeProcedure : "uses"
+categoryRoutes ..> category : "uses"
+projectRoutes ..> project : "uses"
+
+' External Auth
+auth ..> Auth : "uses"
+DBService .up.> mysqlPool : "uses"
+DBService .up.> global : "uses"
+@enduml
