@@ -2,7 +2,7 @@
 title Use Case Diagram for Test Result DB Access
 ' left to right direction
 skinparam actorStyle "rounded"
-
+skinparam defaultTextAlignment center
 
 actor "User/Customer" as User
 actor "Tester/CT System" as Tester
@@ -11,6 +11,9 @@ usecase "Import Test Result" as ImportTestResult
 
 usecase "View Test Result" as ViewTestResult
 
+Node "Web Access Management\n(WAM)" as WAM {
+
+}
 ' Import Tool Package
 rectangle "Import Tool" as ImportTool #LightGray {
     usecase "Parse Test Result" as ParseTestResult
@@ -32,22 +35,24 @@ rectangle "Server" as Server #lightblue {
 
 ' Actor Connections
 User --> ViewTestResult
-ViewTestResult --> WebInterface
+ViewTestResult --> WAM: https protocol\n <<port:443>>
+WAM --> WebInterface
 Tester --> ImportTestResult
 
 ' Import Tool Connections
 ImportTestResult --> ParseTestResult
-ParseTestResult -left-> AccessDB
-AccessDB .left.> RestAPIAccess : <<include>>
-AccessDB ..> DirectAccess : <<include>>
-DirectAccess -left-> DB: sql protocol\n <<port:3306>>
+ParseTestResult -right-> AccessDB
+AccessDB .right.> RestAPIAccess : <<extend>>
+AccessDB ..> DirectAccess : <<extend>>
+DirectAccess -right-> DB: sql protocol\n <<port:3306>>
 
 ' Server Connections
-RestAPIAccess -left-> RestAPI: https protocol\n <<port:443>>
+RestAPIAccess -left-> WAM: http protocol\n <<port:4443>>
+WAM --> RestAPI
 
 ' Internal Server Connections
 RestAPI --> DBService
 WebInterface --> DBService
-DBService --> DB
+DBService -left-> DB
 
 @enduml
