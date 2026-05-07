@@ -18,5 +18,5 @@
 #
 # Version and date of TestResultDBAccess
 #
-VERSION      = "0.1.6"
-VERSION_DATE = "11.04.2025"
+VERSION      = "0.2.0"
+VERSION_DATE = "07.05.2026"
