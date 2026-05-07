@@ -38,7 +38,7 @@ jobs:
               chmod +x ./requirements_linux.sh
               ./requirements_linux.sh
             fi
-            python -m pip install --upgrade build twine wheel GenPackageDoc PythonExtensionsCollection
+            python -m pip install --upgrade setuptools build twine wheel GenPackageDoc PythonExtensionsCollection
             if [ -f "./requirements.txt" ]; then
               python -m pip install -r ./requirements.txt
             fi
