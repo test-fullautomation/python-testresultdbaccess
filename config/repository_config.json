@@ -13,7 +13,7 @@
    "DEVELOPMENTSTATUS" : "Development Status :: 4 - Beta",
    "INTENDEDAUDIENCE" : "Intended Audience :: Developers",
    "TOPIC" : "Topic :: Software Development",
-   "INSTALLREQUIRES" : ["mysqlclient","requests_kerberos"],
+   "INSTALLREQUIRES" : ["mysqlclient","requests_kerberos", "selenium"],
    "PACKAGEDATA" : ["*.pdf", "DBAccess/*.py", "DBAccess/webdrivers/**"],
    "PACKAGEDOC" : "./packagedoc",
    "CONSOLESCRIPTS": ""
