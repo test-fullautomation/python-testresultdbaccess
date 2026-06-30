@@ -373,7 +373,7 @@ Connects to the database via REST API using the provided credentials.
 
       res = self.session.post("{}/login".format(self.base_url), allow_redirects=True, json=req_body, verify=self.session.verify)
       if res.json()['data'] == "login_success":
-         print("  > Login successfully!")
+         print("  > Login successful!")
       else:
          raise Exception('Login failed!')
 
@@ -391,7 +391,7 @@ Disconnect from TestResultWebApp's database.
       """
       res = self.session.get(self.base_url+'/logout', allow_redirects=True, verify=self.session.verify)
       if res.status_code == 200:
-         print("  > Logout successfully!")
+         print("  > Logout successful!")
       else:
          raise Exception('Logout failed!')
 
@@ -410,7 +410,7 @@ Get existing categories.
 
    / *Type*: list /
 
-   List of exsiting categories.
+   List of existing categories.
       """
       data = self.__get_request('categories')
       if data:

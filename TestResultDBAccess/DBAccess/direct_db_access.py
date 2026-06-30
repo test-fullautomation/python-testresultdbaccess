@@ -26,7 +26,7 @@
 #
 # February 2022:
 #  - update source code document
-# 
+#
 # March 2024:
 #  - rename file to direct_db_access due to DB interface feature of RobotLog2DB
 #
@@ -135,7 +135,7 @@ Connect to the database with provided authentication and db info.
 
    def commit(self):
       """
-Commit changes within transaction. 
+Commit changes within transaction.
 
 **Arguments:**
 
@@ -1206,7 +1206,7 @@ Get existing categories.
 
    / *Type*: list /
 
-   List of exsiting categories.
+   List of existing categories.
       """
       sql="""select category from """ + self.db + """.tbl_result_categories"""
       res=self.__arExec(sql, bHasResponse=True)
